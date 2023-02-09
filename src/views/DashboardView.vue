@@ -17,8 +17,10 @@ import NewPostButton from '../components/NewPostButton.vue'
       <div class="post-list">
         <div v-for="post in posts" :key="post.id">
           <div class="post">
+            <router-link :to="{name: 'post', params: {id: post.id}}">
             <p>{{post.title}}</p>
             <div class="image"></div>
+          </router-link>
           </div>
         </div>
         <button class="load-more" @click="loadMore">Load More</button>
