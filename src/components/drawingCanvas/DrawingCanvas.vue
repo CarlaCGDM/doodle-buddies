@@ -5,10 +5,10 @@
 <template>
     <form>
         <input type="text" placeholder="Title" />
-        <fieldset class="drawing-area">
-          <canvas ref="canvas" width="300" height="300" @mousedown="startDrawing" @mousemove="continueDrawing" @mouseup="stopDrawing"></canvas>
-          <ColorPicker @update:brushColor="updateBrushColor" />
-        </fieldset>
+        <div class="drawing-area">
+          <canvas ref="canvas" width="800" height="400" @mousedown="startDrawing" @mousemove="continueDrawing" @mouseup="stopDrawing"></canvas>
+          <ColorPicker @update:brushColor="updateBrushColor"/>
+        </div>
         <textarea placeholder="Description"></textarea>
         <button @click="saveImage">Save Image</button>
     </form>
@@ -77,5 +77,11 @@ link.click();
 .drawing-area {
   display: flex;
   flex-direction: row;
+  margin: 10px;
+}
+
+.color-picker {
+  position:fixed;
+  right: 0;
 }
 </style>

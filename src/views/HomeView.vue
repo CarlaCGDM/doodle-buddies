@@ -9,19 +9,19 @@
       <p v-else>Welcome back! Please enter your email and password to log in.</p>
     </div>
     <div class="right-section">
-      <form class="access-form">
+      <form class="form-container">
+        <a href="#" @click.prevent="switchForm">{{ isLogin ? "Don't have an account? Switch to register" : "Already have an account? Switch to Login" }}</a>
         <template v-if="!isLogin">
-          <input type="text" placeholder="Username" />
-          <input type="email" placeholder="Email" />
-          <input type="password" placeholder="Password" />
-          <input type="password" placeholder="Confirm Password" />
+          <input class="form-input" type="text" placeholder="Username" />
+          <input class="form-input" type="email" placeholder="Email" />
+          <input class="form-input" type="password" placeholder="Password" />
+          <input class="form-input" type="password" placeholder="Confirm Password" />
         </template>
         <template v-else>
-          <input type="email" placeholder="Email" />
-          <input type="password" placeholder="Password" />
+          <input class="form-input" type="email" placeholder="Email" />
+          <input class="form-input" type="password" placeholder="Password" />
         </template>
-        <button type="submit"><RouterLink to="/dashboard">{{ isLogin ? 'Login' : 'Register' }}</RouterLink></button>
-        <a href="#" @click.prevent="switchForm">{{ isLogin ? 'Switch to Register' : 'Switch to Login' }}</a>
+        <button class="form-submit" type="submit"><RouterLink to="/dashboard">{{ isLogin ? 'Login' : 'Register' }}</RouterLink></button>
       </form>
     </div>
   </div>
@@ -59,36 +59,54 @@ export default {
     padding: 2em;
   }
 
-  .access-form {
+  .form-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: orange;
-    padding: 1em;
-    border-radius: 20px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #F1F1F1;
+    padding: 40px;
+    max-width: 500px;
+    margin: 100px auto;
   }
 
-  input[type="text"],
-  input[type="email"],
-  input[type="password"] {
-    width: 80%;
-    height: 2em;
-    margin-bottom: 1em;
-    padding: 0.5em;
-  }
+  .form-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #DCDCDC;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #707070;
+  transition: border-color 0.3s ease-in-out;
+}
 
-  button[type="submit"] {
-    width: 80%;
-    height: 2em;
-    background-color: blue;
-    color: white;
-    font-weight: bold;
-    margin-top: 1em;
-  }
+.form-input:focus {
+  border-color: #707070;
+  outline: none;
+}
 
-  a {
-    color: blue;
-    text-decoration: underline;
-    margin-top: 1em;
-  }
+.form-submit {
+  width: 100%;
+  padding: 10px;
+  background-color: #464646;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.form-submit:hover {
+  transform: translateY(-3px);
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.form-submit:active {
+  transform: translateY(-1px);
+  box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.2);
+}
+
 </style>

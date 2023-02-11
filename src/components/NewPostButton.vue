@@ -4,11 +4,8 @@ import DrawingCanvas from './drawingCanvas/DrawingCanvas.vue'
 
 <template>
     <div>
-      <div id="square" v-if="showSquare">
-        <h2>Make new post</h2>
-        <DrawingCanvas />
-    </div>
-      <button id="toggle-square" @click="toggleSquare">Toggle Square</button>
+      <DrawingCanvas class="square" v-if="showSquare" />
+      <button id="toggle-square" @click="toggleSquare">+</button>
     </div>
   </template>
   
@@ -30,17 +27,34 @@ import DrawingCanvas from './drawingCanvas/DrawingCanvas.vue'
   <style>
   #toggle-square {
     position: fixed;
-    bottom: 0;
-    width: 100%;
+    top: 2rem;
+    left: 2rem;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 20px;
+    background-color: black;
+    color: white;
+    transition: all 0.3s ease-in-out;
+    font-size: 2rem;
+    border-width: 0px;
+  }
+
+  #toggle-square:hover {
+    transform: translateY(10px);
+    background-color: blueviolet;
+    font-size: 3rem;
+    cursor: pointer;
   }
   
-  #square {
+  .square {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 70vw;
     height: 75vh;
-    background-color: lightblue;
+    background-color: rgb(117, 117, 117);
+    border-radius: 20px;
+    padding: 20px;
   }
   </style>

@@ -1,5 +1,7 @@
 <script setup>
 import {useRoute} from "vue-router"
+import PostDetail from "../components/posts/PostDetail.vue"
+import EditHistory from "../components/posts/EditHistory.vue"
 const route = useRoute()
 </script>
 
@@ -7,7 +9,8 @@ const route = useRoute()
 
 <template>
     <div class="about">
-      <h1>{{route.params.id}}</h1>
+      <PostDetail :title="route.params.id"/>
+      <EditHistory/>
     </div>
 </template>
   

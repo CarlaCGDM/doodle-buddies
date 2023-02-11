@@ -1,33 +1,40 @@
 <script setup>
 import NewPostButton from '../components/NewPostButton.vue'
+import Post from '../components/posts/Post.vue'
 </script>
 
 <template>
   <div class="dashboard">
-    <header class="header">
-      <button class="toggle-menu" @click="showMenu = !showMenu">
-        ☰
-      </button>
-      <h1>DoodleBuddies</h1>
+    <header class="header" :class="{ hide: !showHeader }">
+      <h1 class="title">DoodleBuddies</h1>
+      <p>Make art with thousands of friends!</p>
     </header>
-    <aside class="sidebar" :class="{ show: showMenu }">
-      <!-- your sidebar content goes here -->
-    </aside>
-    <main class="main" :class="{ hide: showMenu }">
+    <!-- <aside class="sidebar" :class="{ show: showMenu }" @mouseenter="showMenu = !showMenu" @mouseleave="showMenu = !showMenu">
+
+      <div class="sidebar-content">
+
+      <div class="circle"></div>
+      <p>@_testuser1</p>
+      <button><RouterLink to="/profile">Your Profile</RouterLink></button>
+      <button>Logout</button>
+
+      </div>
+
+    </aside> -->
+    <main class="main" :class="{ hide: showMenu || showCanvas }" @mouseenter="showHeader = !showHeader" @mouseleave="showHeader = !showHeader">
       <div class="post-list">
         <div v-for="post in posts" :key="post.id">
-          <div class="post">
-            <router-link :to="{name: 'post', params: {id: post.id}}">
-            <p>{{post.title}}</p>
-            <div class="image"></div>
-          </router-link>
-          </div>
+      
+          <Post 
+          :title="post.title"
+          :id="post.id"/>
+          
         </div>
         <button class="load-more" @click="loadMore">Load More</button>
       </div>
     </main>
   </div>
-  <NewPostButton />
+  <NewPostButton @click="showCanvas = !showCanvas; showHeader = !showHeader" />
 </template>
 
 <script>
@@ -36,6 +43,8 @@ export default {
   data() {
     return {
       showMenu: false,
+      showCanvas: false,
+      showHeader: true,
       posts: [
         /* your post data */
       ],
@@ -56,6 +65,10 @@ export default {
 </script>
 
 <style>
+.title {
+  font-size: 5rem;
+}
+
 .dashboard {
   display: flex;
   flex-direction: column;
@@ -65,14 +78,18 @@ export default {
 
 .header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   padding: 1rem;
-  background-color: lightgray;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  height: 20rem;
+  transition: all 0.3s ease-in-out;
+  gap: 3rem;
+  
 }
 
 .toggle-menu {
@@ -85,20 +102,57 @@ export default {
 
 .sidebar {
   position: fixed;
-  top: 5rem;
-  height: calc(100vh - 5rem);
-  bottom: 0;
+  width: 20vw;
   left: 0;
-  width: 300px;
-  background-color: black;
-  transition: transform 0.3s ease-out;
-  transform: translateX(-100%);
+  bottom: 0;
+  top: 0;
+  transition: all 0.3s ease-in-out;
+  transform: translateX(-90%);
   z-index: 100;
-  opacity: 0.95;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
 }
+
+.sidebar-content {
+  width: 90%;
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: black;
+  border-radius: 10px;
+  padding-top: 20%;
+}
+
+  .sidebar .circle {
+    width: 10vw;
+    height: 10vw;
+    border-radius: 100%;
+    background-color: #5dade2;
+  }
+
+  .sidebar button {
+    width: 150px;
+    height: 50px;
+    margin-top: 30px;
+    border: none;
+    border-radius: 25px;
+    background-color: #5dade2;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+  }
 
 .sidebar.show {
   transform: translateX(0);
+}
+
+.header.hide {
+  transform: translateY(-12.5rem);
 }
 
 .main {
@@ -106,9 +160,15 @@ export default {
   overflow: auto;
   transition: opacity 0.3s ease-out;
   opacity: 1;
-  margin-top: 4rem;
+  margin-top: 20rem;
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
+  transition: all 0.3s ease-in-out;
+  width: 100vw;
+}
+
+.main:hover {
+  margin-top: 7.5rem;
 }
 
 .main.hide {
@@ -122,6 +182,7 @@ export default {
   justify-content: center;
   align-content: flex-start;
   padding: 1rem;
+  gap: 20px;
 }
 
 .post-list .post {

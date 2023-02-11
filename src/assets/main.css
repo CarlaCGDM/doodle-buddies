@@ -6,7 +6,8 @@
   width: 100vw;
 
   font-weight: normal;
-  background-color: white;
+  background-image: url("./fondo2.svg");
+  background-size: cover;
 }
 
 a,
