@@ -9,7 +9,7 @@
       </div>
 
       <router-link :to="{name: 'post', params: {id: id}}">
-      <img :src="image" class="post-image"/>
+      <img :src="imgSrc" class="post-image"/>
     </router-link>
 
       <div class="post-footer">

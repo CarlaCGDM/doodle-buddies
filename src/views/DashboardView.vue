@@ -29,7 +29,7 @@ import Post from '../components/posts/Post.vue'
           :title="post.titulo"
           :id="index"
           :likes="post.favoritos.length"
-          :image="getImage(1)"/>
+          :imgSrc="post.imagen"/>
           
         </div>
         <button class="load-more" @click="loadMore">Load More</button>
@@ -69,7 +69,7 @@ export default {
     getImage(id) {
       axios.get(`http://localhost:3001/api/v1/imagenes/${id}`).then((result) => {
       console.log(result);
-      return result;
+      return result.data;
     })
     }
   },
