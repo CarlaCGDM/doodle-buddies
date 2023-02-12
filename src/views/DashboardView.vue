@@ -23,18 +23,20 @@ import Post from '../components/posts/Post.vue'
     </aside> -->
     <main class="main" :class="{ hide: showMenu || showCanvas }" @mouseenter="showHeader = !showHeader" @mouseleave="showHeader = !showHeader">
       <div class="post-list">
-        <div v-for="post in posts" :key="post.id">
+        <div v-for="(post,index) in posts" :key="index">
       
           <Post 
-          :title="post.title"
-          :id="post.id"/>
+          :title="post.titulo"
+          :id="index"
+          :likes="post.favoritos.length"
+          :image="getImage(1)"/>
           
         </div>
         <button class="load-more" @click="loadMore">Load More</button>
       </div>
     </main>
   </div>
-  <NewPostButton @click="showCanvas = !showCanvas; showHeader = !showHeader" />
+  <NewPostButton @update:showCanvas="updateCanvas" />
 </template>
 
 <script>
@@ -51,7 +53,7 @@ export default {
     };
   },
   mounted() {
-    axios.get("https://jsonplaceholder.typicode.com/posts").then((result) => {
+    axios.get("http://localhost:3001/api/v1/publicaciones").then((result) => {
       console.log(result.data);
       this.posts = result.data;
     })
@@ -60,6 +62,16 @@ export default {
     loadMore() {
       /* your load more logic */
     },
+    updateCanvas() {
+      this.showCanvas = !this.showCanvas;
+      this.showHeader = !this.showHeader;
+    },
+    getImage(id) {
+      axios.get(`http://localhost:3001/api/v1/imagenes/${id}`).then((result) => {
+      console.log(result);
+      return result;
+    })
+    }
   },
 };
 </script>
@@ -173,6 +185,7 @@ export default {
 
 .main.hide {
   opacity: 0.3;
+  filter: saturate(0);
   pointer-events: none;
 }
 

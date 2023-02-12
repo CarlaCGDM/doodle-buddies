@@ -19,6 +19,7 @@ import DrawingCanvas from './drawingCanvas/DrawingCanvas.vue'
     methods: {
       toggleSquare() {
         this.showSquare = !this.showSquare;
+        this.$emit("update:showCanvas", true);
       },
     },
   };
@@ -51,10 +52,6 @@ import DrawingCanvas from './drawingCanvas/DrawingCanvas.vue'
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 70vw;
-    height: 75vh;
-    background-color: rgb(117, 117, 117);
-    border-radius: 20px;
-    padding: 20px;
+    
   }
   </style>

@@ -36,6 +36,8 @@
   .color-picker {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
     width: 100px;
   }
   
@@ -43,7 +45,7 @@
     height: 30px;
     width: 30px;
     margin: 5px;
-    border: 1px solid #333;
+    border: 2px solid #333;
     border-radius: 5px;
     cursor: pointer;
   }

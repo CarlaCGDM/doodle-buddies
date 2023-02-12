@@ -3,14 +3,12 @@
 </script>
 
 <template>
-    <form>
-        <input type="text" placeholder="Title" />
-        <div class="drawing-area">
-          <canvas ref="canvas" width="800" height="400" @mousedown="startDrawing" @mousemove="continueDrawing" @mouseup="stopDrawing"></canvas>
-          <ColorPicker @update:brushColor="updateBrushColor"/>
-        </div>
-        <textarea placeholder="Description"></textarea>
-        <button @click="saveImage">Save Image</button>
+    <form class="new-drawing-form">
+        <input class="newpost-title" type="text" placeholder="Title" />
+        <div class="canvas"><canvas ref="canvas" width="1024" height="468" @mousedown="startDrawing" @mousemove="continueDrawing" @mouseup="stopDrawing"></canvas></div>
+        <ColorPicker @update:brushColor="updateBrushColor"/>
+        <!-- <textarea class="newpost-description" placeholder="Description" rows="20" cols="20"></textarea> -->
+        <button class="save-button" @click="saveImage">Save Image</button>
     </form>
   </template>
   
@@ -74,14 +72,54 @@ link.click();
 </script>
 
 <style>
-.drawing-area {
+
+.new-drawing-form {
   display: flex;
-  flex-direction: row;
-  margin: 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1rem;
+  padding-top: 1rem;
 }
 
 .color-picker {
   position:fixed;
-  right: 0;
+  right: -7rem;
+  top: 7.5rem;
 }
+
+.canvas {
+  background-color: rgb(231, 231, 231);
+  border-radius: 20px;
+  padding: 20px;
+  border: 3px dashed #000000;
+}
+
+.newpost-title {
+  border: none;
+  border-radius: 4px;
+  background-color: transparent;
+  padding: 5px;
+  font-size: 18px;
+  width: 100%;
+}
+
+.newpost-description {
+  border: none;
+  background-color: black;
+  border-radius: 10px;
+  padding: 5px;
+  position: fixed;
+  top: 7rem;
+  left: -13rem;
+}
+
+.save-button {
+  padding: 1rem;
+  width: 100%;
+  background-color: black;
+  color: white;
+  border-radius: 15px;
+}
+
 </style>

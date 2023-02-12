@@ -56,7 +56,7 @@ export default {
   }
 
   .post-image:hover {
-    transform: translateY(5px);
+    transform: translateY(-5px);
   }
   
   .post-header {
