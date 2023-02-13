@@ -3,17 +3,19 @@
 </script>
 
 <template>
-    <form class="new-drawing-form">
+    <div class="new-drawing-form" enctype="multipart/form-data">
         <input class="newpost-title" type="text" placeholder="Title" />
         <div class="canvas"><canvas ref="canvas" width="1024" height="468" @mousedown="startDrawing" @mousemove="continueDrawing" @mouseup="stopDrawing"></canvas></div>
         <ColorPicker @update:brushColor="updateBrushColor"/>
         <!-- <textarea class="newpost-description" placeholder="Description" rows="20" cols="20"></textarea> -->
         <button class="save-button" @click="saveImage">Save Image</button>
-    </form>
+    </div>
   </template>
   
   <script>
   import {fabric} from 'fabric';
+  import axios from "axios";
+  import FormData from "form-data";
   
   export default {
     data() {
@@ -25,7 +27,7 @@
     },
     mounted() {
       this.canvas = new fabric.Canvas(this.$refs.canvas);
-      this.startDrawing("#fff");
+      this.startDrawing("#f67280");
     },
     methods: {
       updateBrushColor(e) {
@@ -52,12 +54,29 @@
         this.canvas.isDrawingMode = false;
       },
       saveImage() {
+        
         const dataURL = this.canvas.toDataURL({
           format: 'jpeg',
           quality: 1,
         });
 
+        const form = new FormData();
+        form.append("image", dataURL);
+
+        console.log(form);
+
         /* Aquí en lugar de bajarla al PC del usuario tengo que mandarla por POST al servidor */
+
+        axios.post('http://localhost:3001/api/v1/save-image', form, {
+          headers: {
+            'Content-Type': '"multipart/form-data'
+  },})
+        .then(response => {
+        console.log('Image saved successfully', response.data);
+        })
+        .catch(error => {
+        console.error('Error saving image', error);
+        });
 
         this.downloadImage(dataURL, 'doodle.jpeg');
       },

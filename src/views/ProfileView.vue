@@ -100,3 +100,40 @@
   }
   </style>
   
+  <!-- <template>
+    <div>
+      <button @click="showDiv1">Show Div 1</button>
+      <button @click="showDiv2"> Show Div 2</button>
+      <div v-show="showFirstDiv" style="background-color: blue; height: 100px; width: 100px;"></div>
+      <div v-show="showSecondDiv" style="background-color: red; height: 100px; width: 100px;"></div>
+    </div>
+  </template> -->
+  
+  <!-- <script>
+  export default {
+    data() {
+      return {
+        showFirstDiv: true,
+        showSecondDiv: false
+      };
+    },
+    methods: {
+      showDiv1() {
+        this.showFirstDiv = true;
+        this.showSecondDiv = false;
+      },
+      showDiv2() {
+        this.showFirstDiv = false;
+        this.showSecondDiv = true;
+      }
+    }
+  };
+  </script>
+  
+  <style>
+    div {
+      display: inline-block;
+    }
+  </style> -->
+  
+  

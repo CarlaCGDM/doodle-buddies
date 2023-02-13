@@ -10,7 +10,7 @@
 
       <router-link :to="{name: 'post', params: {id: id}}">
       <img :src="imgSrc" class="post-image"/>
-    </router-link>
+      </router-link>
 
       <div class="post-footer">
         <span class="like-count">{{ likes }} Likes</span>
@@ -49,7 +49,6 @@ export default {
   
   <style scoped>
   .post-container {
-    
     overflow: hidden;
     margin-bottom: 20px;
     width: 20vw;

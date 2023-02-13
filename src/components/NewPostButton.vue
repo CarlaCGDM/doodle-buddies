@@ -5,7 +5,7 @@ import DrawingCanvas from './drawingCanvas/DrawingCanvas.vue'
 <template>
     <div>
       <DrawingCanvas class="square" v-if="showSquare" />
-      <button id="toggle-square" @click="toggleSquare">+</button>
+      <button id="toggle-square" @click="toggleSquare"><p :class="{rotate: showSquare}" class="mas" >+</p></button>
     </div>
   </template>
   
@@ -32,18 +32,27 @@ import DrawingCanvas from './drawingCanvas/DrawingCanvas.vue'
     left: 2rem;
     width: 4rem;
     height: 4rem;
+    font-size: 2rem;
     border-radius: 20px;
     background-color: black;
     color: white;
     transition: all 0.3s ease-in-out;
-    font-size: 2rem;
     border-width: 0px;
+  }
+
+  .mas {
+    transition: all 0.3s ease-in-out;
+  }
+
+  .mas.rotate {
+    transform: rotate(45deg);
+    
   }
 
   #toggle-square:hover {
     transform: translateY(10px);
     background-color: blueviolet;
-    font-size: 3rem;
+    font-size: 3.25rem;
     cursor: pointer;
   }
   

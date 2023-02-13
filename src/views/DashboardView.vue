@@ -9,18 +9,7 @@ import Post from '../components/posts/Post.vue'
       <h1 class="title">DoodleBuddies</h1>
       <p>Make art with thousands of friends!</p>
     </header>
-    <!-- <aside class="sidebar" :class="{ show: showMenu }" @mouseenter="showMenu = !showMenu" @mouseleave="showMenu = !showMenu">
-
-      <div class="sidebar-content">
-
-      <div class="circle"></div>
-      <p>@_testuser1</p>
-      <button><RouterLink to="/profile">Your Profile</RouterLink></button>
-      <button>Logout</button>
-
-      </div>
-
-    </aside> -->
+    
     <main class="main" :class="{ hide: showMenu || showCanvas }" @mouseenter="showHeader = !showHeader" @mouseleave="showHeader = !showHeader">
       <div class="post-list">
         <div v-for="(post,index) in posts" :key="index">
@@ -29,10 +18,11 @@ import Post from '../components/posts/Post.vue'
           :title="post.titulo"
           :id="index"
           :likes="post.favoritos.length"
-          :imgSrc="post.imagen"/>
+          :imgSrc="`http://localhost:3001/${post.imagen}`"/>
           
         </div>
-        <button class="load-more" @click="loadMore">Load More</button>
+        <button class="load-more" @click="previousPage">Previous</button>
+        <button class="load-more" @click="nextPage">Next</button>
       </div>
     </main>
   </div>
@@ -47,29 +37,37 @@ export default {
       showMenu: false,
       showCanvas: false,
       showHeader: true,
+      page: 1,
       posts: [
         /* your post data */
       ],
     };
   },
   mounted() {
-    axios.get("http://localhost:3001/api/v1/publicaciones").then((result) => {
+    this.loadPosts();
+  },
+  methods: {
+    loadPosts() {
+      axios.get(`http://localhost:3001/api/v1/publicaciones/page/${this.page}`).then((result) => {
       console.log(result.data);
       this.posts = result.data;
     })
-  },
-  methods: {
-    loadMore() {
-      /* your load more logic */
+    },
+    nextPage() {
+      this.page++;
+      this.loadPosts();
+    },
+    previousPage() {
+      this.page--;
+      this.loadPosts();
     },
     updateCanvas() {
       this.showCanvas = !this.showCanvas;
       this.showHeader = !this.showHeader;
     },
-    getImage(id) {
-      axios.get(`http://localhost:3001/api/v1/imagenes/${id}`).then((result) => {
-      console.log(result);
-      return result.data;
+    getAuthorUsername(id) {
+      axios.get(`http://localhost:3001/api/v1/usuarios/:id`).then((result) => {
+      return result.data.nombreusu;
     })
     }
   },
@@ -104,6 +102,10 @@ export default {
   
 }
 
+.header.hide {
+  transform: translateY(-12.5rem);
+}
+
 .toggle-menu {
   background-color: transparent;
   border: none;
@@ -112,60 +114,6 @@ export default {
   font-size: 1.5rem;
 }
 
-.sidebar {
-  position: fixed;
-  width: 20vw;
-  left: 0;
-  bottom: 0;
-  top: 0;
-  transition: all 0.3s ease-in-out;
-  transform: translateX(-90%);
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  
-}
-
-.sidebar-content {
-  width: 90%;
-  height: 70%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  background-color: black;
-  border-radius: 10px;
-  padding-top: 20%;
-}
-
-  .sidebar .circle {
-    width: 10vw;
-    height: 10vw;
-    border-radius: 100%;
-    background-color: #5dade2;
-  }
-
-  .sidebar button {
-    width: 150px;
-    height: 50px;
-    margin-top: 30px;
-    border: none;
-    border-radius: 25px;
-    background-color: #5dade2;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-  }
-
-.sidebar.show {
-  transform: translateX(0);
-}
-
-.header.hide {
-  transform: translateY(-12.5rem);
-}
 
 .main {
   flex: 1;
