@@ -86,12 +86,13 @@ export default {
       if (this.isScrolling) {
         setInterval(() => {
           this.isScrolling = false;
-      }, 400);
+      }, 150);
       }
 
       if (!this.isScrolling) {
         console.log(e.deltaY);
         if (e.deltaY > 0) {
+          
         this.nextPage();
         
         this.isScrolling = true;
@@ -105,9 +106,6 @@ export default {
       console.log(scrollContainer.scrollHeight - Math.floor(scrollContainer.scrollTop));
 
       }
-          
-          
-
 },
     getAuthorUsername(id) {
       axios.get(`http://localhost:3001/api/v1/usuarios/:id`).then((result) => {
@@ -179,6 +177,7 @@ export default {
   width: 100vw;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .main:hover {

@@ -13,7 +13,7 @@
       </router-link>
 
       <div class="post-footer">
-        <span class="like-count">{{ likes }} Likes</span>
+        <span class="like-count">{{ showLikes }} Likes</span>
         <button @click="toggleLike">
           <template v-if="liked">Unlike</template>
           <template v-else>Like</template>
@@ -24,20 +24,21 @@
   
   <script>
 export default {
-  props: ['title', 'id', 'imgSrc', 'description'],
+  props: ['title', 'id', 'imgSrc', 'likes', 'description'],
   data() {
     return {
-      likes: 0,
+      showLikes: this.likes,
       liked: false
     }
   },
+
   methods: {
     toggleLike() {
       this.liked = !this.liked
       if (this.liked) {
-        this.likes++
+        this.showLikes++
       } else {
-        this.likes--
+        this.showLikes--
       }
     },
     cutTitle(title) {
