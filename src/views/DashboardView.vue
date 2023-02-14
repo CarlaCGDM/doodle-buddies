@@ -10,7 +10,7 @@ import Post from '../components/posts/Post.vue'
       <p>Make art with thousands of friends!</p>
     </header>
     
-    <main class="main" :class="{ hide: showMenu || showCanvas }" @mouseenter="showHeader = !showHeader" @mouseleave="showHeader = !showHeader" ref="postList" @scroll="checkIfScrolledToBottom">
+    <main class="main" :class="{ hide: showMenu || showCanvas }" @mouseenter="showHeader = !showHeader" @mouseleave="showHeader = !showHeader" ref="scrollContainer" @scroll="">
       <div class="post-list">
         <div v-for="(post,index) in posts" :key="index">
       
@@ -21,9 +21,14 @@ import Post from '../components/posts/Post.vue'
           :imgSrc="`http://localhost:3001/${post.imagen}`"/>
           
         </div>
-        <button class="load-more" @click="previousPage">Previous</button>
+      </div>
+
+      <div class="paginator">
+        <button class="load-more" @click="previousPage">Prev</button>
+        <p>{{page}}</p>
         <button class="load-more" @click="nextPage">Next</button>
       </div>
+      
     </main>
   </div>
   <NewPostButton @update:showCanvas="updateCanvas" />
@@ -38,6 +43,7 @@ export default {
       showCanvas: false,
       showHeader: true,
       page: 1,
+      isScrolling: false,
       posts: [
         /* your post data */
       ],
@@ -60,18 +66,44 @@ export default {
     previousPage() {
       this.page--;
       this.loadPosts();
+      
     },
     updateCanvas() {
       this.showCanvas = !this.showCanvas;
       this.showHeader = !this.showHeader;
     },
-    checkIfScrolledToBottom() {
-      const target = this.$refs.postList;
-      if (target.scrollTop + target.clientHeight >= target.scrollHeight) {
-        this.nextPage();
+    handleScroll() {
+     
+      console.log(this.isScrolling);
+
+      const scrollContainer = this.$refs.scrollContainer;
+
+      if (this.isScrolling) {
+        setInterval(() => {
+          this.isScrolling = false;
+      }, 250);
       }
-      console.log("hola");
-    },
+
+      if (!this.isScrolling) {
+        if (scrollContainer.scrollHeight - Math.floor(scrollContainer.scrollTop) === scrollContainer.clientHeight) {
+        this.nextPage();
+
+        scrollContainer.scrollTop = 0;
+        
+        this.isScrolling = true;
+      } else if (scrollContainer.scrollTop === 0) {
+        
+        //ir para arriba
+        
+      }
+
+      console.log(scrollContainer.scrollHeight - Math.floor(scrollContainer.scrollTop));
+
+      }
+          
+          
+
+},
     getAuthorUsername(id) {
       axios.get(`http://localhost:3001/api/v1/usuarios/:id`).then((result) => {
       return result.data.nombreusu;
@@ -82,6 +114,14 @@ export default {
 </script>
 
 <style>
+
+.paginator {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
 .title {
   font-size: 5rem;
 }
@@ -135,6 +175,8 @@ export default {
 }
 
 .main:hover {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
   margin-top: 7.5rem;
 }
 
