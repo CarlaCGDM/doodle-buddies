@@ -10,7 +10,7 @@ import Post from '../components/posts/Post.vue'
       <p>Make art with thousands of friends!</p>
     </header>
     
-    <main class="main" :class="{ hide: showMenu || showCanvas }" @mouseenter="showHeader = !showHeader" @mouseleave="showHeader = !showHeader" ref="scrollContainer" @scroll="">
+    <main class="main" :class="{ hide: showMenu || showCanvas }" @mouseenter="showHeader = !showHeader" @mouseleave="showHeader = !showHeader" ref="scrollContainer" @wheel="handleScroll">
       <div class="post-list">
         <div v-for="(post,index) in posts" :key="index">
       
@@ -23,11 +23,11 @@ import Post from '../components/posts/Post.vue'
         </div>
       </div>
 
-      <div class="paginator">
+      <!-- <div class="paginator">
         <button class="load-more" @click="previousPage">Prev</button>
         <p>{{page}}</p>
         <button class="load-more" @click="nextPage">Next</button>
-      </div>
+      </div> -->
       
     </main>
   </div>
@@ -57,6 +57,9 @@ export default {
       axios.get(`http://localhost:3001/api/v1/publicaciones/page/${this.page}`).then((result) => {
       console.log(result.data);
       this.posts = result.data;
+
+      // si no hay posts mostrar mensaje de que no hay mas posts !! 
+      
     })
     },
     nextPage() {
@@ -64,7 +67,9 @@ export default {
       this.loadPosts();
     },
     previousPage() {
+      if (this.page > 0) {
       this.page--;
+      }
       this.loadPosts();
       
     },
@@ -72,7 +77,7 @@ export default {
       this.showCanvas = !this.showCanvas;
       this.showHeader = !this.showHeader;
     },
-    handleScroll() {
+    handleScroll(e) {
      
       console.log(this.isScrolling);
 
@@ -81,19 +86,19 @@ export default {
       if (this.isScrolling) {
         setInterval(() => {
           this.isScrolling = false;
-      }, 250);
+      }, 400);
       }
 
       if (!this.isScrolling) {
-        if (scrollContainer.scrollHeight - Math.floor(scrollContainer.scrollTop) === scrollContainer.clientHeight) {
+        console.log(e.deltaY);
+        if (e.deltaY > 0) {
         this.nextPage();
-
-        scrollContainer.scrollTop = 0;
         
         this.isScrolling = true;
-      } else if (scrollContainer.scrollTop === 0) {
+      } else {
         
-        //ir para arriba
+        this.previousPage();
+        this.isScrolling = true;
         
       }
 
@@ -168,15 +173,15 @@ export default {
   transition: opacity 0.3s ease-out;
   opacity: 1;
   margin-top: 20rem;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  /* -ms-overflow-style: none; 
+  scrollbar-width: none;   */
   transition: all 0.3s ease-in-out;
   width: 100vw;
+  align-items: center;
+  justify-content: center;
 }
 
 .main:hover {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
   margin-top: 7.5rem;
 }
 
