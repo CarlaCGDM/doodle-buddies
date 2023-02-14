@@ -10,7 +10,7 @@ import Post from '../components/posts/Post.vue'
       <p>Make art with thousands of friends!</p>
     </header>
     
-    <main class="main" :class="{ hide: showMenu || showCanvas }" @mouseenter="showHeader = !showHeader" @mouseleave="showHeader = !showHeader">
+    <main class="main" :class="{ hide: showMenu || showCanvas }" @mouseenter="showHeader = !showHeader" @mouseleave="showHeader = !showHeader" ref="postList" @scroll="checkIfScrolledToBottom">
       <div class="post-list">
         <div v-for="(post,index) in posts" :key="index">
       
@@ -64,6 +64,13 @@ export default {
     updateCanvas() {
       this.showCanvas = !this.showCanvas;
       this.showHeader = !this.showHeader;
+    },
+    checkIfScrolledToBottom() {
+      const target = this.$refs.postList;
+      if (target.scrollTop + target.clientHeight >= target.scrollHeight) {
+        this.nextPage();
+      }
+      console.log("hola");
     },
     getAuthorUsername(id) {
       axios.get(`http://localhost:3001/api/v1/usuarios/:id`).then((result) => {
