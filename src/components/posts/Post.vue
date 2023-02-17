@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       showLikes: this.likes,
-      liked: false
+      liked: false,
     }
   },
 

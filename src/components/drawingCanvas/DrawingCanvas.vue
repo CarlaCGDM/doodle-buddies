@@ -60,17 +60,11 @@
           quality: 1,
         });
 
-        const form = new FormData();
-        form.append("image", dataURL);
-
-        console.log(form);
+        console.log(dataURL);
 
         /* Aquí en lugar de bajarla al PC del usuario tengo que mandarla por POST al servidor */
 
-        axios.post('http://localhost:3001/api/v1/save-image', form, {
-          headers: {
-            'Content-Type': '"multipart/form-data'
-  },})
+        axios.post('http://localhost:3001/api/v1/save-image', {"image":dataURL})
         .then(response => {
         console.log('Image saved successfully', response.data);
         })
@@ -78,7 +72,16 @@
         console.error('Error saving image', error);
         });
 
-        this.downloadImage(dataURL, 'doodle.jpeg');
+        axios.put('http://localhost:3001/api/v1/publicaciones/1', {"titulo":"prueba"})
+        .then(response => {
+        console.log('Image saved successfully', response.data);
+        this.$router.replace({name: 'dashboard', params: {id: "1"}});
+        })
+        .catch(error => {
+        console.error('Error saving image', error);
+        });
+
+        // this.downloadImage(dataURL, 'doodle.jpeg');
       },
       downloadImage(dataURL, fileName) {
         const link = document.createElement('a');
