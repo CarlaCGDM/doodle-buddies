@@ -8,12 +8,12 @@ import APIRoot from '../router/APIRoot'
 <template>
   <div class="dashboard">
 
-    <header class="header">
+    <header class="header" :class="{hide: showCanvas}">
       <h1 class="title">DoodleBuddies</h1>
       <p>Make art with thousands of friends!</p>
     </header>
     
-    <main class="main" :class="{ hide: showCanvas }" ref="scrollContainer" @wheel="handleScroll">
+    <main class="main" :class="{ hide: showCanvas}" ref="scrollContainer" @wheel="handleScroll">
         <div v-for="(post,index) in posts" :key="index">
       
           <Post 
@@ -76,9 +76,7 @@ export default {
           this.posts = result.data;
 
         })
-        .catch(error => {
-          this.page--;
-  });
+        .catch( error => { this.page--; } );
   },
 
     nextPage() {
@@ -100,6 +98,8 @@ export default {
     updateCanvas() {
 
       this.showCanvas = !this.showCanvas;
+      this.page = 1;
+      this.loadPosts();
 
     },
 
@@ -112,6 +112,7 @@ export default {
         this.isScrolling = true;
         
         if (e.deltaY > 0) {
+          
           
           //animacion de ir hacia arriba y desvanecerse
           
@@ -158,12 +159,12 @@ export default {
   position: absolute;
   right: 0;
   bottom: 0;
-  transition: all 0s;
+  transition: all 0.3s;
   padding: 1.5rem;
 }
 
 .paginator.hide {
-  opacity: 0%;
+  opacity: 0.1;
 }
 
 .paginator-button {
@@ -203,7 +204,7 @@ export default {
 }
 
 .header.hide {
-  transform: translateY(-12.5rem);
+  opacity: 0.1;
 }
 
 .toggle-menu {
@@ -231,7 +232,7 @@ export default {
 }
 
 .main.hide {
-  opacity: 0.3;
+  opacity: 0.1;
   filter: saturate(0);
   pointer-events: none;
 }

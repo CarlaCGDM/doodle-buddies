@@ -6,6 +6,7 @@
           <button @click="deletePost">Delete</button>
         </div> -->
           <h2 class="post-title">{{ cutTitle(title) }}</h2>
+          <p></p>
       </div>
 
       <router-link :to="{name: 'post', params: {id: id}}">

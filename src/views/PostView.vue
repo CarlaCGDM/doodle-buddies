@@ -2,26 +2,30 @@
 import {useRoute} from "vue-router"
 import PostDetail from "../components/posts/PostDetail.vue"
 import EditHistory from "../components/posts/EditHistory.vue"
-import { Axios } from "axios";
+import axios from "axios";
+import APIRoot from "../router/APIRoot";
 const route = useRoute()
 </script>
 
 <!--Aquí tengo que hacer la request a mi API para que me devuelva la info de un único producto con la ID que tengo-->
 
 <template>
-    <div class="about">
-      <PostDetail :title="route.params.id"/>
-      <p>{data.titulo}</p>
+    <main v-if="hasPostData" class="post-detail-container">
+      <PostDetail 
+      :title="postData.titulo"
+      :description="postData.descripcion"
+      :likes="postData.favoritos.length"
+      :imgSrc="`${APIRoot}/${postData.imagen}`"/>
       <EditHistory/>
-    </div>
+    </main>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      showMenu: false,
-      data: {}
+      hasPostData: false,
+      postData: {}
     };
   },
   mounted() {
@@ -29,26 +33,24 @@ export default {
   },
   methods: {
     loadPost() {
-      Axios.get(`http://localhost:3001/api/v1/publicaciones/${this.route.params.id}`).then((result) => {
+      axios.get(`${APIRoot}/api/v1/publicaciones/publicacion/${this.$route.params.id}`).then((result) => {
       console.log(result.data);
-      this.data = result.data;
-
-      // si no hay posts mostrar mensaje de que no hay mas posts !! 
+      this.postData = result.data;
+      this.hasPostData = true;
       
     })
-
   }
 }
 };
 </script>
   
 <style>
-  @media (min-width: 1024px) {
-    .about {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-    }
+  .post-detail-container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
   }
 </style>
 

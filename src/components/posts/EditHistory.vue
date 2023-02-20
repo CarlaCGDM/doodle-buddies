@@ -75,7 +75,6 @@
     justify-content: center;
     width: 150px;
     height: 500px;
-    margin: 0 auto;
     position: relative;
   }
   

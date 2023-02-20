@@ -3,11 +3,9 @@ import DrawingCanvas from './drawingCanvas/DrawingCanvas.vue'
 </script>
 
 <template>
-    <div>
-      <DrawingCanvas class="square" v-if="showSquare" />
+      <DrawingCanvas @update:imageSaved="imageSaved" class="square" v-if="showSquare" />
       <button id="toggle-square" @click="toggleSquare"><p :class="{rotate: showSquare}" class="mas" >+</p></button>
-    </div>
-  </template>
+</template>
   
   <script>
   export default {
@@ -21,6 +19,9 @@ import DrawingCanvas from './drawingCanvas/DrawingCanvas.vue'
         this.showSquare = !this.showSquare;
         this.$emit("update:showCanvas", true);
       },
+      imageSaved() {
+        this.toggleSquare();
+      }
     },
   };
   </script>
