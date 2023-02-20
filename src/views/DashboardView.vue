@@ -2,10 +2,12 @@
 import NewPostButton from '../components/NewPostButton.vue'
 import Post from '../components/posts/Post.vue'
 import APIRoot from '../router/APIRoot'
+
 </script>
 
 <template>
   <div class="dashboard">
+
     <header class="header" :class="{ hide: !showHeader }">
       <h1 class="title">DoodleBuddies</h1>
       <p>Make art with thousands of friends!</p>
@@ -24,13 +26,14 @@ import APIRoot from '../router/APIRoot'
         </div>
       </div>
 
-      <!-- <div class="paginator">
-        <button class="load-more" @click="previousPage">Prev</button>
+      <div class="paginator" :class="{ hide: showHeader || showCanvas }">
+        <button class="paginator-button" @click="previousPage"><font-awesome-icon icon="fa-solid fa-arrow-up" /></button>
         <p>{{page}}</p>
-        <button class="load-more" @click="nextPage">Next</button>
-      </div> -->
+        <button class="paginator-button" @click="nextPage"><font-awesome-icon icon="fa-solid fa-arrow-down" /></button>
+      </div>
       
     </main>
+
   </div>
   <NewPostButton @update:showCanvas="updateCanvas" />
 </template>
@@ -44,7 +47,6 @@ export default {
       showCanvas: false,
       showHeader: true,
       page: 1,
-      isScrolling: false,
       posts: [
         /* your post data */
       ],
@@ -102,12 +104,7 @@ export default {
 
     },
     handleScroll(e) {
-     
-      console.log(this.isScrolling);
 
-      const scrollContainer = this.$refs.scrollContainer;
-
-      
         if (e.deltaY > 0) {
           
           //animacion de ir hacia arriba y desvanecerse
@@ -116,19 +113,15 @@ export default {
 
         this.nextPage();
         
-        this.isScrolling = true;
       } else {
         
         this.previousPage();
-        this.isScrolling = true;
         
       }
 
-      console.log(scrollContainer.scrollHeight - Math.floor(scrollContainer.scrollTop));
-
 },
     getAuthorUsername(id) {
-      axios.get(`${this.APIRoot}/usuarios/usuario/:id`).then((result) => {
+      axios.get(`${APIRoot}/usuarios/usuario/${id}`).then((result) => {
       return result.data.nombreusu;
     })
     }
@@ -140,9 +133,28 @@ export default {
 
 .paginator {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: fixed;
+  right: 0.5rem;
+  bottom: 1rem;
+  transition: all 0.6s;
+}
+
+.paginator.hide {
+  opacity: 0%;
+}
+
+.paginator-button {
+  margin: 1rem;
+  height: 2rem;
+  width: 2rem;
+  border: none;
+  cursor: pointer;
+  color: white;
+  background-color: black;
+  border-radius: 50%;
 }
 
 .title {
@@ -234,15 +246,6 @@ export default {
   text-align: center;
   margin-top: 0.5rem;
   height: 4rem;
-}
-
-.load-more {
-  margin: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: lightgray;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
  /* Media query for mobile */
