@@ -1,6 +1,7 @@
 <script setup>
 import NewPostButton from '../components/NewPostButton.vue'
 import Post from '../components/posts/Post.vue'
+import APIRoot from '../router/APIRoot'
 </script>
 
 <template>
@@ -18,7 +19,7 @@ import Post from '../components/posts/Post.vue'
           :title="post.titulo"
           :id="index"
           :likes="post.favoritos.length"
-          :imgSrc="`${this.APIRoot}/${post.imagen}`"/>
+          :imgSrc="`${APIRoot}/${post.imagen}`"/>
           
         </div>
       </div>
@@ -52,7 +53,7 @@ export default {
   mounted() {
 
     // Nada más cargar, se pide la primera página de publicaciones al servidor
-    console.log("Estás en Dashboard. Las peticiones se realizan a: " + this.APIRoot);
+    console.log("Estás en Dashboard. Las peticiones se realizan a: " + APIRoot);
     this.loadPosts();
 
   },
@@ -64,7 +65,7 @@ export default {
       // Realizamos petición
       console.log(`Realizando petición de página de publicaciones ${this.page} al servidor.`); 
       axios
-        .get(`${this.$APIRoot}/api/v1/publicaciones/pagina/${this.page}`)
+        .get(`${APIRoot}/api/v1/publicaciones/pagina/${this.page}`)
         .then((result) => {
 
           // Recibimos datos
