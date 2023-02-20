@@ -64,7 +64,7 @@ export default {
       // Realizamos petición
       console.log(`Realizando petición de página de publicaciones ${this.page} al servidor.`); 
       axios
-        .get(`${this?.APIRoot}/api/v1/publicaciones/pagina/${this.page}`)
+        .get(`${this.$APIRoot}/api/v1/publicaciones/pagina/${this.page}`)
         .then((result) => {
 
           // Recibimos datos
