@@ -1,27 +1,62 @@
+<script setup>
+  import APIRoot from '../router/APIRoot';
+  import LoggedUserId from '../router/LoggedUser';
+  import NavBar from '../components/NavBar.vue';
+  
+  import axios from 'axios';
+</script>
 <template>
+  <main>
     <div class="profile-container">
-      <div class="profile-header">
-        <img class="profile-picture" :src="profilePicture"/>
-        <h2 class="profile-name">{{ profileName }}</h2>
-        <p class="profile-joined-date">{{ joinedDate }}</p>
+      <div class="profile-header" v-if="showUserInfo">
+        <img class="profile-picture" :src="`${APIRoot}/${this.userInfo.avatar}`"/>
+        <h2 class="profile-name">@_{{ this.userInfo.nombreusu }}</h2>
+        <p class="profile-joined-date">Member since {{ this.userInfo.fechaAlta.split(',')[0] }}</p>
       </div>
       <div class="tab-container">
-        <div class="tab" @click="selectedTab = 'posts'">
+        <div class="tab" :class="{selected : showingPosts}" @click="showPosts">
           Posts
         </div>
-        <div class="tab" @click="selectedTab = 'favorites'">
-          Favorites
+        <div class="tab" :class="{selected : showingLikes}" @click="showLikes">
+          Likes
         </div>
       </div>
-      <div class="posts-container" v-if="selectedTab === 'posts'">
-        <!-- Use the Post component to display the user's posts -->
-        <Post v-for="post in posts" :key="post.id" :post="post"/>
+      <div class="likes-container" v-if="showingLikes && canShowLikes">
+
+        <!-- Favoritos del usuario -->
+
+        <div v-for="post,index in this.userLikes.favoritos" :key="index">
+      
+        <Post 
+        :title="post.titulo"
+        :id="index"
+        :likes="post.favoritos.length"
+        :imgSrc="`${APIRoot}/${post.imagen}`"/>
+    
+        </div>
+    
       </div>
-      <div class="favorites-container" v-if="selectedTab === 'favorites'">
-        <!-- Use the Post component to display the user's favorite posts -->
-        <Post v-for="favorite in favorites" :key="favorite.id" :post="favorite"/>
+
+      <div class="posts-container" v-if="showingPosts && canShowPosts">
+        
+        <!-- Publicaciones del usuario -->
+
+        <div v-for="post,index in this.userPosts.publicaciones" :key="index">
+      
+        <Post 
+        :title="post.titulo"
+        :id="index"
+        :likes="post.favoritos.length"
+        :imgSrc="`${APIRoot}/${post.imagen}`"/>
+      
+        </div>
+
       </div>
     </div>
+  </main>
+
+  <NavBar />
+
   </template>
   
   <script>
@@ -33,18 +68,102 @@
     },
     data() {
       return {
+        showingLikes: false,
+        canShowLikes: false,
+        showingPosts: true,
+        canShowPosts: false,
+        showUserInfo: false,
+        userInfo: {},
+        userPosts: [],
+        userLikes: [],
         profilePicture: '', // URL to the user's profile picture
         profileName: '', // User's name
         joinedDate: '', // User's date of joining
         posts: [], // Array of user's posts
         favorites: [], // Array of user's favorite posts
         selectedTab: 'posts' // The currently selected tab
+      }},
+      mounted() {
+        this.getUserData();
+        this.getUserLikes();
+        this.getUserPosts();
+      },
+
+      methods: {
+
+        showLikes() {
+          console.log(this.userInfo);
+          this.showingLikes = true;
+          this.showingPosts = false;
+        },
+
+        showPosts() {
+          this.showingLikes = false;
+          this.showingPosts = true;
+        },
+
+        getUserData() {
+
+        // Foto y nombre del usuario
+
+        axios
+        .get(`${APIRoot}/api/v1/usuarios/usuario/${LoggedUserId}`)
+        .then((result) => {
+
+          
+          console.log("hay info del usuario");
+          console.log(result.data);
+          this.userInfo = result.data;
+          this.showUserInfo = true;
+
+        })
+        .catch( error => {  } );
+
+        },
+
+        getUserLikes() {
+
+        // Favoritos del usuario
+
+        axios
+        .get(`${APIRoot}/api/v1/publicaciones/favoritos/${LoggedUserId}`)
+        .then((result) => {
+
+          console.log("hay favoritos del usuario");
+          console.log(result.data);
+          this.userLikes = result.data;
+          this.canShowLikes = true;
+        })
+        .catch( error => {} );
+        },
+
+        getUserPosts() {
+          
+          // Publicaciones del usuario
+
+        axios
+        .get(`${APIRoot}/api/v1/publicaciones/usuario/${LoggedUserId}`)
+        .then((result) => {
+
+          console.log("hay publicaciones del usuario");
+          console.log(result.data);
+          this.userPosts = result.data;
+          this.canShowPosts = true;
+        })
+        .catch( error => {} );
+        }
+
+      
       }
     }
-  }
   </script>
   
   <style>
+
+.selected {
+  background-color: gray;
+}
+
   .profile-container {
     display: flex;
     flex-direction: column;
@@ -93,10 +212,13 @@
     background-color: lightgray;
   }
   
-  .posts-container, .favorites-container {
-    display: flex;
-    flex-wrap: wrap;
+  .posts-container, .likes-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto;
     justify-content: center;
+    overflow-y: scroll;
+    gap: 1rem;
   }
   </style>
   

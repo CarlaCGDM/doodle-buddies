@@ -10,7 +10,7 @@
       </button>
       <div class="post-header-info">
         <h2 class="post-detail-title">{{ title }}</h2>
-        <p>@creatorUsername</p>
+        <p>@authorUsername</p>
       </div>
     </div>
 
