@@ -83,15 +83,13 @@ export default {
 
       const scrollContainer = this.$refs.scrollContainer;
 
-      if (this.isScrolling) {
-        setInterval(() => {
-          this.isScrolling = false;
-      }, 400);
-      }
-
-      if (!this.isScrolling) {
-        console.log(e.deltaY);
+      
         if (e.deltaY > 0) {
+          
+          //animacion de ir hacia arriba y desvanecerse
+          
+          //animacion de aparecer desde abajo, con setTimeout
+
         this.nextPage();
         
         this.isScrolling = true;
@@ -103,10 +101,6 @@ export default {
       }
 
       console.log(scrollContainer.scrollHeight - Math.floor(scrollContainer.scrollTop));
-
-      }
-          
-          
 
 },
     getAuthorUsername(id) {
@@ -179,6 +173,7 @@ export default {
   width: 100vw;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .main:hover {

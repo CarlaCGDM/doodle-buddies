@@ -51,7 +51,7 @@ import DrawingCanvas from './drawingCanvas/DrawingCanvas.vue'
 
   #toggle-square:hover {
     transform: translateY(10px);
-    background-color: blueviolet;
+    background-color: #26c07b;
     font-size: 3.25rem;
     cursor: pointer;
   }
