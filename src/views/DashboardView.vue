@@ -18,7 +18,7 @@ import Post from '../components/posts/Post.vue'
           :title="post.titulo"
           :id="index"
           :likes="post.favoritos.length"
-          :imgSrc="`http://localhost:3001/${post.imagen}`"/>
+          :imgSrc="`${this.APIRoot}/${post.imagen}`"/>
           
         </div>
       </div>
@@ -50,32 +50,55 @@ export default {
     };
   },
   mounted() {
+
+    // Nada más cargar, se pide la primera página de publicaciones al servidor
+    console.log("Estás en Dashboard. Las peticiones se realizan a: " + this.APIRoot);
     this.loadPosts();
+
   },
   methods: {
-    loadPosts() {
-      axios.get(`http://localhost:3001/api/v1/publicaciones/page/${this.page}`).then((result) => {
-      console.log(result.data);
-      this.posts = result.data;
 
-      // si no hay posts mostrar mensaje de que no hay mas posts !! 
-      
-    })
-    },
+    loadPosts() {
+
+
+      // Realizamos petición
+      console.log(`Realizando petición de página de publicaciones ${this.page} al servidor.`); 
+      axios
+        .get(`${this.APIRoot}/api/v1/publicaciones/pagina/${this.page}`)
+        .then((result) => {
+
+          // Recibimos datos
+
+          console.log(result.data);
+          console.log("hay publicaciones");
+          this.posts = result.data; 
+
+        })
+        .catch(error => {
+          this.page--;
+  });
+  },
+
     nextPage() {
+
       this.page++;
       this.loadPosts();
+
     },
+
     previousPage() {
-      if (this.page > 0) {
+      
+      if (this.page > 1) {
       this.page--;
-      }
       this.loadPosts();
+      }
       
     },
     updateCanvas() {
+
       this.showCanvas = !this.showCanvas;
       this.showHeader = !this.showHeader;
+
     },
     handleScroll(e) {
      
@@ -104,7 +127,7 @@ export default {
 
 },
     getAuthorUsername(id) {
-      axios.get(`http://localhost:3001/api/v1/usuarios/:id`).then((result) => {
+      axios.get(`${this.APIRoot}/usuarios/usuario/:id`).then((result) => {
       return result.data.nombreusu;
     })
     }
