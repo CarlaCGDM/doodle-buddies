@@ -7,9 +7,15 @@
 <template>
     <div class="new-drawing-form" enctype="multipart/form-data">
       <div class="text-input-fields">
+
         <input class="newpost-title" type="text" v-model="title" placeholder="Title" />
+        <p v-if="titleError" class="error">¡Tienes que introducir un título!</p>
+
         <textarea class="newpost-description" v-model="description" cols="10" rows="10" placeholder="Description"></textarea>
+        <p v-if="descriptionError" class="error">¡Tienes que introducir una descripción!</p>
+
         <button class="save-button" @click="saveImage">Save Image</button>
+        
         <ColorPicker @update:brushColor="updateBrushColor"/>
       </div>
         
@@ -32,6 +38,8 @@
         lastPointer: {},
         title: '',
         description: '',
+        titleError: false,
+        descriptionError: false,
       };
     },
     mounted() {
@@ -63,6 +71,18 @@
         this.canvas.isDrawingMode = false;
       },
       saveImage() {
+
+        if (this.title == '') {
+          this.titleError = true;
+        } else {
+          this.titleError = false;
+        }
+
+        if (this.description == '') {
+          this.descriptionError = true;
+        } else {
+          this.descriptionError = false;
+        }
         
         const dataURL = this.canvas.toDataURL({
           format: 'jpeg',
@@ -78,9 +98,9 @@
 
         console.log(formData);
 
-        /* Aquí en lugar de bajarla al PC del usuario tengo que mandarla por POST al servidor */
+        if (!this.titleError && !this.descriptionError) {
 
-        axios.post(`${APIRoot}/api/v1/publicaciones/`, formData)
+          axios.post(`${APIRoot}/api/v1/publicaciones/`, formData)
         .then(response => {
         console.log('Image saved successfully', response.data);
         this.$emit("update:imageSaved", true);
@@ -88,6 +108,8 @@
         .catch(error => {
         console.error('Error saving image', error);
         });
+
+        }
 
         // this.downloadImage(dataURL, 'doodle.jpeg');
 
@@ -152,6 +174,10 @@ link.click();
   background-color: black;
   color: white;
   border-radius: 15px;
+}
+
+.error {
+  color: rgb(170, 3, 3);
 }
 
 </style>
