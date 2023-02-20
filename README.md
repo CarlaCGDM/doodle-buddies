@@ -1,28 +1,22 @@
 # doodle-buddies
 
-This template should help get you started developing with Vue 3 in Vite.
+Versión alpha para una red social de dibujo colaborativo basada en imágenes que los usuarios dibujan dentro de la propia aplicación. Funcionalidad muy limitada frente a la que será la versión final.
 
-## Recommended IDE Setup
+## Aplicación desplegada:
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+https://fluffy-lollipop-07d87e.netlify.app/
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
+## Inicializar en local (desarrollo)
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
-
 ```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+### Inicializar en local (compilar para producción)
 
 ```sh
 npm run build
