@@ -13,10 +13,10 @@
       </router-link>
 
       <div class="post-footer">
-        <span class="like-count">{{ showLikes }} Likes</span>
-        <button @click="toggleLike">
-          <template v-if="liked">Unlike</template>
-          <template v-else>Like</template>
+        <span class="like-count" v-if="liked">{{ likes + 1 }} Likes</span>
+        <span class="like-count" v-else>{{ likes }} Likes</span>
+        <button @click="toggleLike" class="like-button" :class="{red : liked}">
+          <font-awesome-icon icon="fa-solid fa-heart" size="lg" class=""/>
         </button>
       </div>
     </div>
@@ -27,19 +27,12 @@ export default {
   props: ['title', 'id', 'imgSrc', 'likes', 'description'],
   data() {
     return {
-      showLikes: this.likes,
       liked: false,
     }
   },
-
   methods: {
     toggleLike() {
       this.liked = !this.liked
-      if (this.liked) {
-        this.showLikes++
-      } else {
-        this.showLikes--
-      }
     },
     cutTitle(title) {
         return title.length > 30 ? title.slice(0, 30) + '...' : title;
@@ -52,7 +45,7 @@ export default {
   .post-container {
     overflow: hidden;
     margin-bottom: 20px;
-    width: 20vw;
+    width: 18vw;
   }
 
   .post-image:hover {
@@ -66,8 +59,8 @@ export default {
   
   .post-title {
     height: 5vh;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 1.3rem;
+    font-weight: 300;
     margin-left: 0.5rem;
   }
   
@@ -92,20 +85,30 @@ export default {
   }
   
   .post-image {
+    aspect-ratio: 3/2;
     width: 100%;
-    border: 2px solid #2C3E50;
+    height: auto;
+    border: 1px dotted #2C3E50;
     border-radius: 20px;
-    height: 25vh;
     background-color:rgb(163, 206, 206);
     transition: all 0.5s ease-in-out;
   }
-
   
   .post-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem;
+    padding: 0.2rem 0.5rem 0rem 0.5rem;
+  }
+
+  .like-button {
+    color: rgb(226, 226, 226);
+    background-color: transparent;
+    border: none;
+  }
+
+  .like-button.red {
+    color: red;
   }
 
   </style>

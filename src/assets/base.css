@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Abel&display=swap');
+
 
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
@@ -107,4 +109,8 @@ body {
 
 h1 {
   font-family: "Rock Salt", cursive;
+}
+
+h2, p {
+  font-family: "Abel", sans-serif;
 }

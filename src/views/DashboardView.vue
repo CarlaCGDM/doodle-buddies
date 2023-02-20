@@ -8,13 +8,12 @@ import APIRoot from '../router/APIRoot'
 <template>
   <div class="dashboard">
 
-    <header class="header" :class="{ hide: !showHeader }">
+    <header class="header">
       <h1 class="title">DoodleBuddies</h1>
       <p>Make art with thousands of friends!</p>
     </header>
     
-    <main class="main" :class="{ hide: showMenu || showCanvas }" @mouseenter="showHeader = !showHeader" @mouseleave="showHeader = !showHeader" ref="scrollContainer" @wheel="handleScroll">
-      <div class="post-list">
+    <main class="main" :class="{ hide: showCanvas }" ref="scrollContainer" @wheel="handleScroll">
         <div v-for="(post,index) in posts" :key="index">
       
           <Post 
@@ -23,29 +22,29 @@ import APIRoot from '../router/APIRoot'
           :likes="post.favoritos.length"
           :imgSrc="`${APIRoot}/${post.imagen}`"/>
           
-        </div>
       </div>
-
-      <div class="paginator" :class="{ hide: showHeader || showCanvas }">
-        <button class="paginator-button" @click="previousPage"><font-awesome-icon icon="fa-solid fa-arrow-up" /></button>
-        <p>{{page}}</p>
-        <button class="paginator-button" @click="nextPage"><font-awesome-icon icon="fa-solid fa-arrow-down" /></button>
-      </div>
-      
     </main>
 
   </div>
+  
+  <div class="paginator" :class="{ hide: showCanvas }">
+    <button class="paginator-button" @click="previousPage"><font-awesome-icon icon="fa-solid fa-arrow-up" /></button>
+      <p>{{page}}</p>
+    <button class="paginator-button" @click="nextPage"><font-awesome-icon icon="fa-solid fa-arrow-down" /></button>
+  </div>
+
   <NewPostButton @update:showCanvas="updateCanvas" />
+
 </template>
 
 <script>
 import axios from "axios";
+import { nextTick } from 'vue';
 export default {
   data() {
     return {
-      showMenu: false,
       showCanvas: false,
-      showHeader: true,
+      isScrolling: false,
       page: 1,
       posts: [
         /* your post data */
@@ -74,7 +73,7 @@ export default {
 
           console.log(result.data);
           console.log("hay publicaciones");
-          this.posts = result.data; 
+          this.posts = result.data;
 
         })
         .catch(error => {
@@ -97,14 +96,21 @@ export default {
       }
       
     },
+
     updateCanvas() {
 
       this.showCanvas = !this.showCanvas;
-      this.showHeader = !this.showHeader;
 
     },
+
     handleScroll(e) {
 
+      if (!this.isScrolling) {
+
+        //Límite de un cambio cada 0.5 segundos
+        console.log("Desactivando el scroll durante los próximos 0.5 segundos.");
+        this.isScrolling = true;
+        
         if (e.deltaY > 0) {
           
           //animacion de ir hacia arriba y desvanecerse
@@ -113,10 +119,18 @@ export default {
 
         this.nextPage();
         
-      } else {
+      } else { 
         
-        this.previousPage();
-        
+        this.previousPage(); 
+      
+      }
+
+      //Volver a habilitar el scroll pasados los 0.5 segundos
+      setTimeout(() => {
+        console.log("El scroll vuelve a estar permitido.");
+        this.isScrolling = false;
+      }, "500")
+
       }
 
 },
@@ -131,15 +145,21 @@ export default {
 
 <style>
 
+.dashboard {
+  display:flex;
+  flex-direction: column;
+}
+
 .paginator {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: fixed;
-  right: 0.5rem;
-  bottom: 1rem;
-  transition: all 0.6s;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  transition: all 0s;
+  padding: 1.5rem;
 }
 
 .paginator.hide {
@@ -158,13 +178,14 @@ export default {
 }
 
 .title {
-  font-size: 5rem;
+  font-size: 3rem;
 }
 
 .dashboard {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  justify-content: center;
   
 }
 
@@ -174,13 +195,9 @@ export default {
   justify-content: center;
   align-items: center;
   padding: 1rem;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 20rem;
+  height: 15vh;
   transition: all 0.3s ease-in-out;
-  gap: 3rem;
+  gap: 0.5rem;
   
 }
 
@@ -198,54 +215,24 @@ export default {
 
 
 .main {
-  flex: 1;
-  overflow: auto;
-  transition: opacity 0.3s ease-out;
-  opacity: 1;
-  margin-top: 20rem;
-  /* -ms-overflow-style: none; 
-  scrollbar-width: none;   */
-  transition: all 0.3s ease-in-out;
-  width: 100vw;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  justify-items: center;
   align-items: center;
-  justify-content: center;
+  height: 85vh;
+  width: 100%;
+  
+  transition: all 0.3s ease-in-out;
   overflow: hidden;
-}
-
-.main:hover {
-  margin-top: 7.5rem;
+  
+  padding: 3rem 8rem;
 }
 
 .main.hide {
   opacity: 0.3;
   filter: saturate(0);
   pointer-events: none;
-}
-
-.post-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-content: flex-start;
-  padding: 1rem;
-  gap: 20px;
-}
-
-.post-list .post {
-  width: 300px;
-  margin: 1rem;
-  height: auto;
-}
-
-.post-list .post .image {
-    background-color: blueviolet;
-    height: 10rem;
-}
-
-.post-list p {
-  text-align: center;
-  margin-top: 0.5rem;
-  height: 4rem;
 }
 
  /* Media query for mobile */
