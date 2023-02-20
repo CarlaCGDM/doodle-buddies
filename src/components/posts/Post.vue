@@ -111,4 +111,17 @@ export default {
     color: red;
   }
 
+  /* Media query for mobile */
+ @media (max-width: 768px) {
+
+.post-container {
+  width: 80vw;
+}
+
+.post-title {
+  font-size: 1rem;
+}
+
+}
+
   </style>

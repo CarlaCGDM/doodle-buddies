@@ -63,4 +63,12 @@ import DrawingCanvas from './drawingCanvas/DrawingCanvas.vue'
     transform: translate(-50%, -50%);
     
   }
+
+  @media (max-width: 768px) {
+
+  #toggle-square {
+    top: calc(100% - 6rem);
+    left: calc(50% - 2rem);
+  }
+}
   </style>

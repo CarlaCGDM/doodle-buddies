@@ -186,6 +186,7 @@ export default {
   flex-direction: column;
   height: 100vh;
   justify-content: center;
+  justify-items: center;
   
 }
 
@@ -236,24 +237,25 @@ export default {
 }
 
  /* Media query for mobile */
- @media only screen and (max-width: 768px) {
-    .header button {
-      display: none;
+ @media (max-width: 768px) {
+
+    .title {
+      font-size: 2rem;
+    }
+
+    .main {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      height: 80vh;
+      padding: 0;
     }
 
     .header {
-      font-size: 20px;
+      height: 20vh;
     }
 
-    .sidebar {
-      position: fixed;
-      top: 5em;
-      left: 0px;
-      right: 0px;
-      width: 100%;
-      height: 10vh;
-      background-color: black;
-      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    .paginator {
+      display: none;
     }
   }
 
