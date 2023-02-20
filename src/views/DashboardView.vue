@@ -2,6 +2,7 @@
 import NewPostButton from '../components/NewPostButton.vue'
 import Post from '../components/posts/Post.vue'
 import APIRoot from '../router/APIRoot'
+import NavBar from '../components/NavBar.vue';
 
 </script>
 
@@ -13,14 +14,15 @@ import APIRoot from '../router/APIRoot'
       <p>Make art with thousands of friends!</p>
     </header>
     
-    <main class="main" :class="{ hide: showCanvas}" ref="scrollContainer" @wheel="handleScroll">
-        <div v-for="(post,index) in posts" :key="index">
+    <main class="main" :class="{ hide: showCanvas}" @wheel="handleScroll">
+        <div v-for="post in posts" :key="post[0]">
       
           <Post 
-          :title="post.titulo"
-          :id="index"
-          :likes="post.favoritos.length"
-          :imgSrc="`${APIRoot}/${post.imagen}`"/>
+          :title="post[1].titulo"
+          :id="post[0]"
+          :likes="post[1].favoritos.length"
+          :imgSrc="`${APIRoot}/${post[1].imagen}`"
+          :author="'creatorUsername'"/>
           
       </div>
     </main>
@@ -35,6 +37,8 @@ import APIRoot from '../router/APIRoot'
 
   <NewPostButton @update:showCanvas="updateCanvas" />
 
+  <NavBar />
+
 </template>
 
 <script>
@@ -46,9 +50,7 @@ export default {
       showCanvas: false,
       isScrolling: false,
       page: 1,
-      posts: [
-        /* your post data */
-      ],
+      posts: [],
     };
   },
   mounted() {
@@ -56,6 +58,7 @@ export default {
     // Nada más cargar, se pide la primera página de publicaciones al servidor
     console.log("Estás en Dashboard. Las peticiones se realizan a: " + APIRoot);
     this.loadPosts();
+    console.log(this.$posts);
 
   },
   methods: {
@@ -136,7 +139,9 @@ export default {
 
 },
     getAuthorUsername(id) {
-      axios.get(`${APIRoot}/usuarios/usuario/${id}`).then((result) => {
+      axios.get(`${APIRoot}/api/v1/usuarios/usuario/${id}`).then((result) => {
+        
+      console.log(result.data.nombreusu);
       return result.data.nombreusu;
     })
     }

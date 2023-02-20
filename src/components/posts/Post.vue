@@ -6,6 +6,7 @@
           <button @click="deletePost">Delete</button>
         </div> -->
           <h2 class="post-title">{{ cutTitle(title) }}</h2>
+          <!-- <p>@{{ author }}</p> -->
           <p></p>
       </div>
 
@@ -25,7 +26,7 @@
   
   <script>
 export default {
-  props: ['title', 'id', 'imgSrc', 'likes', 'description'],
+  props: ['title', 'id', 'imgSrc', 'likes', 'description','author'],
   data() {
     return {
       liked: false,
